@@ -71,6 +71,20 @@ public final class TargeterParser {
             case "playerlocationbyname" -> new PlayerLocationByNameParser().parse(clean);
             case "escapelocation" -> new EscapeLocationParser().parse(clean);
             
+            /**
+             * Multi-Location Targeters
+             */
+            case "forwardwall" -> new ForwardWallParser().parse(clean);
+            case "playerlocationsinradius", "plir" -> new PlayerLocationsInRadiusParser().parse(clean);
+            case "pin" -> new PinParser().parse(clean);
+            case "ring", "ringaroundorigin", "ringorigin", "rao" -> new RingParser().parse(clean);
+            case "randomringpoint" -> new RandomRingPointParser().parse(clean);
+            case "cone" -> new ConeParser().parse(clean);
+            case "sphere" -> new SphereParser().parse(clean);
+            case "rectangle", "cube", "cuboid" -> new RectangleParser().parse(clean);
+            case "randomlocationsnearcaster", "randomlocations", "rlnc", "randomlocationsnearorigin", "rlo", "randomlocationsorigin", "rlno" -> new RandomLocationsParser().parse(clean);
+            case "blocksnearorigin", "bno" -> new BlocksNearOriginParser().parse(clean);
+            
             default -> null;
         };
     }
