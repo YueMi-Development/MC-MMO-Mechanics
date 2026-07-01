@@ -3,3 +3,7 @@ version: '${version}'
 main: org.yuemi.mmomechanics.plugin.MmoMechanicsPlugin
 authors: [${authors}]
 api-version: '${apiVersion}'
+softdepend: [
+  YueMiLibs,
+  PlaceholderAPI
+]
