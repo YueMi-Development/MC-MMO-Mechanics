@@ -1,6 +1,6 @@
-# Minecraft Plugin Templates
+# MMO Mechanics
 
-This is a repository templates For Minecraft Plugins using gradle.
+A Minecraft server plugin built with the PaperMC API implementing custom MMO gameplay mechanics.
 
 ---
 

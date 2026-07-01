@@ -11,6 +11,6 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = "Minecraft-Plugin-Templates"
+rootProject.name = "MC-MMO-Mechanics"
 include("core-api")
 include("core-plugin")
