@@ -1,0 +1,57 @@
+{
+  // Example skill configuration: strikes 5 times during night, but only 1 time during day.
+  // Each strike is separated by a 3-second delay.
+  name: "Conditional Lightning Storm",
+  mechanics: [
+    // Strike 1 (Always executes)
+    {
+      mechanic: "lightning",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "delay{seconds=3}",
+      targeter: "self",
+      conditions: []
+    },
+    // Strike 2 (Always executes)
+    {
+      mechanic: "lightning",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "delay{seconds=3}",
+      targeter: "self",
+      conditions: []
+    },
+    // Strike 3 (Always executes)
+    {
+      mechanic: "lightning",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "delay{seconds=3}",
+      targeter: "self",
+      conditions: ["isnight"]
+    },
+    // Strike 4 (Only executes at night)
+    {
+      mechanic: "lightning",
+      targeter: "self",
+      conditions: ["isnight"]
+    },
+    {
+      mechanic: "delay{seconds=3}",
+      targeter: "self",
+      conditions: ["isnight"]
+    },
+    // Strike 5 (Only executes at night)
+    {
+      mechanic: "lightning",
+      targeter: "self",
+      conditions: ["isnight"]
+    }
+  ]
+}
