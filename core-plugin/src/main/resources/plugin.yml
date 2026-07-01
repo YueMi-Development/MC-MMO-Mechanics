@@ -7,3 +7,9 @@ softdepend: [
   YueMiLibs,
   PlaceholderAPI
 ]
+
+commands:
+  mmomechanics:
+    description: Main command for MMO Mechanics
+    aliases: [mmom]
+    permission: mmomechanics.command

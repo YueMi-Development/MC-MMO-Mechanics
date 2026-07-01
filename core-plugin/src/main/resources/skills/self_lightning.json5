@@ -1,0 +1,11 @@
+{
+  // Example skill configuration in JSON5 format
+  name: "Self Lightning Strike",
+  mechanics: [
+    {
+      mechanic: "lightning",
+      targeter: "self",
+      conditions: []
+    }
+  ]
+}

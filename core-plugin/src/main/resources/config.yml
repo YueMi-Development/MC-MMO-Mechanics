@@ -1,4 +1,7 @@
-config-version: 1
+config-version: 2
 
 hooks:
   placeholder-api: true
+
+features:
+  command-enabled: true
