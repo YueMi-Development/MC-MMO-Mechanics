@@ -19,6 +19,11 @@
       "projectId": "rZNwNOoR",
       "versionId": "uYYiebn8",
       "dependencyType": "required"
+    },
+    {
+      "projectId": "lKEzGugV",
+      "versionId": "UmbIiI5H",
+      "dependencyType": "optional"
     }
   ]
 }
