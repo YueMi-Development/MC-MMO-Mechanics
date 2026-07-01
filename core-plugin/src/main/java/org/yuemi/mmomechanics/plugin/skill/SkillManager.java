@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.Metaskill;
 import org.yuemi.mmomechanics.api.skill.condition.Condition;
+import org.yuemi.mmomechanics.api.skill.mechanic.DelayMechanic;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.mechanic.MechanicWrapper;
 import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
@@ -36,17 +37,29 @@ public final class SkillManager {
 
     public void loadSkills() {
         loadedSkills.clear();
+
+        try {
+            java.net.URI jarUri = plugin.getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
+            try (java.util.zip.ZipFile zip = new java.util.zip.ZipFile(new File(jarUri))) {
+                Enumeration<? extends java.util.zip.ZipEntry> entries = zip.entries();
+                while (entries.hasMoreElements()) {
+                    java.util.zip.ZipEntry entry = entries.nextElement();
+                    String name = entry.getName();
+                    if (name.startsWith("skills/") && name.endsWith(".json5")) {
+                        try {
+                            plugin.saveResource(name, false);
+                        } catch (IllegalArgumentException ignored) {
+                            // Thrown if already exists
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to extract default skills dynamically: " + e.getMessage());
+        }
+
         File skillsFolder = new File(plugin.getDataFolder(), "skills");
-        if (!skillsFolder.exists()) {
-            skillsFolder.mkdirs();
-        }
-
         File[] files = skillsFolder.listFiles();
-        if (files == null || files.length == 0) {
-            saveDefaultSkill(skillsFolder, "self_lightning.json5");
-            files = skillsFolder.listFiles();
-        }
-
         if (files != null) {
             for (File file : files) {
                 if (file.getName().endsWith(".json5")) {
@@ -61,17 +74,6 @@ public final class SkillManager {
                     }
                 }
             }
-        }
-    }
-
-    private void saveDefaultSkill(File folder, String filename) {
-        File targetFile = new File(folder, filename);
-        try (InputStream in = plugin.getResource("skills/" + filename)) {
-            if (in != null) {
-                Files.copy(in, targetFile.toPath());
-            }
-        } catch (Exception e) {
-            plugin.getLogger().severe("Failed to save default skill: " + filename);
         }
     }
 
@@ -108,8 +110,31 @@ public final class SkillManager {
 
     private @Nullable Mechanic parseMechanic(String name) {
         if (name == null) return null;
-        if (name.trim().equalsIgnoreCase("lightning")) {
+        String clean = name.trim().toLowerCase();
+        if (clean.equalsIgnoreCase("lightning")) {
             return new LightningStrikeMechanic();
+        } else if (clean.startsWith("delay")) {
+            long ticks = 20; // default 1 second
+            if (clean.contains("{") && clean.contains("}")) {
+                String options = clean.substring(clean.indexOf("{") + 1, clean.indexOf("}"));
+                for (String pair : options.split(",")) {
+                    String[] parts = pair.split("=");
+                    if (parts.length == 2) {
+                        String key = parts[0].trim();
+                        String val = parts[1].trim();
+                        if (key.equalsIgnoreCase("ticks")) {
+                            try {
+                                ticks = Long.parseLong(val);
+                            } catch (NumberFormatException ignored) {}
+                        } else if (key.equalsIgnoreCase("seconds")) {
+                            try {
+                                ticks = (long) (Double.parseDouble(val) * 20);
+                            } catch (NumberFormatException ignored) {}
+                        }
+                    }
+                }
+            }
+            return new DelayMechanic(ticks);
         }
         return null;
     }

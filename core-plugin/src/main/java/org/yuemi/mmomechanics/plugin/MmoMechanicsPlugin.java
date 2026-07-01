@@ -10,6 +10,7 @@ import org.yuemi.mmomechanics.plugin.config.migration.ConfigMigrator;
 import org.yuemi.mmomechanics.plugin.config.migration.MigrationStep;
 import org.yuemi.mmomechanics.plugin.config.migration.MigrationStep1To2;
 import org.yuemi.mmomechanics.plugin.skill.SkillManager;
+import org.yuemi.mmomechanics.plugin.skill.executor.SkillExecutorImpl;
 
 import java.io.File;
 import java.util.List;
@@ -42,7 +43,7 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
             }
         }
 
-        this.api = new MmoMechanicsApiImpl();
+        this.api = new MmoMechanicsApiImpl(new SkillExecutorImpl(this));
 
         getServer().getServicesManager().register(
                 MmoMechanicsApi.class,

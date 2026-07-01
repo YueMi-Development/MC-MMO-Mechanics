@@ -1,0 +1,31 @@
+{
+  // Example skill configuration striking lightning 3 times with 5s delay
+  name: "Three Lightning Strikes",
+  mechanics: [
+    {
+      mechanic: "lightning",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "delay{seconds=5}",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "lightning",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "delay{seconds=5}",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "lightning",
+      targeter: "self",
+      conditions: []
+    }
+  ]
+}

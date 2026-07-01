@@ -16,16 +16,9 @@ public interface Metaskill extends Mechanic {
 
     @Override
     default void execute(@NotNull SkillContext context, @NotNull Collection<Target> targets) {
-        for (MechanicWrapper wrapper : getMechanics()) {
-            Collection<Target> stepTargets = wrapper.targeter().getTargets(context);
-            
-            Collection<Target> filtered = stepTargets.stream()
-                    .filter(target -> wrapper.conditions().stream().allMatch(cond -> cond.test(context, target)))
-                    .collect(Collectors.toList());
-            
-            if (!filtered.isEmpty()) {
-                wrapper.mechanic().execute(context, filtered);
-            }
+        org.yuemi.mmomechanics.api.MmoMechanicsApi api = org.bukkit.Bukkit.getServicesManager().load(org.yuemi.mmomechanics.api.MmoMechanicsApi.class);
+        if (api != null) {
+            api.getSkillExecutor().run(context, targets, getMechanics());
         }
     }
 }
