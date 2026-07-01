@@ -52,6 +52,25 @@ public final class TargeterParser {
             case "siblings", "sibling", "brothers", "sisters" -> new SiblingsParser().parse(clean);
             case "itemsnearorigin", "itemsinradius", "iir" -> new ItemsInRadiusParser().parse(clean);
             
+            /**
+             * Single-Location Targeters
+             */
+            case "selflocation", "casterlocation", "bosslocation", "moblocation" -> new SelfLocationParser().parse(clean);
+            case "selfeyelocation", "eyedirection", "castereyelocation", "bosseyelocation", "mobeyelocation" -> new SelfEyeLocationParser().parse(clean);
+            case "forward" -> new ForwardParser().parse(clean);
+            case "projectileforward" -> new ProjectileForwardParser().parse(clean);
+            case "targetlocation", "targetloc", "tl" -> new TargetLocationParser().parse(clean);
+            case "targetpredictedlocation", "targetpredictedloc", "tpl", "predictedtargetlocation" -> new TargetPredictedLocationParser().parse(clean);
+            case "triggerlocation" -> new TriggerLocationParser().parse(clean);
+            case "spawnlocation", "casterspawnlocation" -> new SpawnLocationParser().parse(clean);
+            case "location", "origin", "source" -> new LocationParser().parse(clean);
+            case "obstructingblock" -> new ObstructingBlockParser().parse(clean);
+            case "targetblock" -> new TargetBlockParser().parse(clean);
+            case "variablelocation", "varlocation" -> new VariableLocationParser().parse(clean);
+            case "highestblock" -> new HighestBlockParser().parse(clean);
+            case "playerlocationbyname" -> new PlayerLocationByNameParser().parse(clean);
+            case "escapelocation" -> new EscapeLocationParser().parse(clean);
+            
             default -> null;
         };
     }
