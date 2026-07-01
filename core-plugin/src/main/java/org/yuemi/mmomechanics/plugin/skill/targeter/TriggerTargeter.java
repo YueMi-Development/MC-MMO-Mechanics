@@ -8,10 +8,11 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
-public final class SelfTargeter implements Targeter {
-
+public final class TriggerTargeter implements Targeter {
     @Override
     public @NotNull Collection<Target> getTargets(@NotNull SkillContext context) {
-        return Collections.singletonList(context.getCaster());
+        return context.getTrigger().getTriggerTarget()
+                .map(Collections::singletonList)
+                .orElse(Collections.emptyList());
     }
 }
