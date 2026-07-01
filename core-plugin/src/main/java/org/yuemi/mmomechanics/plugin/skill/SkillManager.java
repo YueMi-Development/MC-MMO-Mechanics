@@ -3,16 +3,14 @@ package org.yuemi.mmomechanics.plugin.skill;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.Metaskill;
 import org.yuemi.mmomechanics.api.skill.condition.Condition;
-import org.yuemi.mmomechanics.api.skill.mechanic.DelayMechanic;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.mechanic.MechanicWrapper;
 import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
-import org.yuemi.mmomechanics.plugin.skill.mechanic.LightningStrikeMechanic;
-import org.yuemi.mmomechanics.plugin.skill.targeter.NearTargeter;
-import org.yuemi.mmomechanics.plugin.skill.targeter.SelfTargeter;
+import org.yuemi.mmomechanics.plugin.skill.parser.condition.ConditionParser;
+import org.yuemi.mmomechanics.plugin.skill.parser.mechanic.MechanicParser;
+import org.yuemi.mmomechanics.plugin.skill.parser.targeter.TargeterParser;
 
 import java.io.File;
 import java.io.InputStream;
@@ -81,12 +79,12 @@ public final class SkillManager {
         List<MechanicWrapper> wrappers = new ArrayList<>();
         if (dto.mechanics() != null) {
             for (MechanicConfigDto mechDto : dto.mechanics()) {
-                Mechanic mechanic = parseMechanic(mechDto.mechanic());
-                Targeter targeter = parseTargeter(mechDto.targeter());
+                Mechanic mechanic = MechanicParser.parse(mechDto.mechanic());
+                Targeter targeter = TargeterParser.parse(mechDto.targeter());
                 List<Condition> conditions = new ArrayList<>();
                 if (mechDto.conditions() != null) {
                     for (String condStr : mechDto.conditions()) {
-                        conditions.add(parseCondition(condStr));
+                        conditions.add(ConditionParser.parse(condStr));
                     }
                 }
                 if (mechanic != null && targeter != null) {
@@ -106,61 +104,6 @@ public final class SkillManager {
                 return wrappers;
             }
         };
-    }
-
-    private @Nullable Mechanic parseMechanic(String name) {
-        if (name == null) return null;
-        String clean = name.trim().toLowerCase();
-        if (clean.equalsIgnoreCase("lightning")) {
-            return new LightningStrikeMechanic();
-        } else if (clean.startsWith("delay")) {
-            String expression = "20";
-            boolean isSeconds = false;
-            if (clean.contains("{") && clean.contains("}")) {
-                String options = clean.substring(clean.indexOf("{") + 1, clean.indexOf("}"));
-                for (String pair : options.split(",")) {
-                    String[] parts = pair.split("=");
-                    if (parts.length == 2) {
-                        String key = parts[0].trim();
-                        String val = parts[1].trim();
-                        if (key.equalsIgnoreCase("ticks")) {
-                            expression = val;
-                            isSeconds = false;
-                        } else if (key.equalsIgnoreCase("seconds")) {
-                            expression = val;
-                            isSeconds = true;
-                        }
-                    }
-                }
-            }
-            return new DelayMechanic(expression, isSeconds);
-        }
-        return null;
-    }
-
-    private @Nullable Targeter parseTargeter(String name) {
-        if (name == null) return null;
-        String cleanName = name.trim().toLowerCase();
-        if (cleanName.equalsIgnoreCase("self")) {
-            return new SelfTargeter();
-        } else if (cleanName.startsWith("near")) {
-            String radiusExpr = "5.0";
-            if (cleanName.contains("{") && cleanName.contains("}")) {
-                String options = cleanName.substring(cleanName.indexOf("{") + 1, cleanName.indexOf("}"));
-                for (String pair : options.split(",")) {
-                    String[] parts = pair.split("=");
-                    if (parts.length == 2 && parts[0].trim().equalsIgnoreCase("r")) {
-                        radiusExpr = parts[1].trim();
-                    }
-                }
-            }
-            return new NearTargeter(radiusExpr);
-        }
-        return null;
-    }
-
-    private @NotNull Condition parseCondition(String name) {
-        return (context, target) -> true;
     }
 
     public @NotNull Optional<Metaskill> getSkill(@NotNull String name) {
