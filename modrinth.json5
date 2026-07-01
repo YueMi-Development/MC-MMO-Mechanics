@@ -1,4 +1,5 @@
 {
+  // Modrinth project configuration
   "projectId": "R8PzhBth",
   "loaders": [
     "paper",
@@ -16,13 +17,13 @@
   ],
   "dependencies": [
     {
-      "projectId": "rZNwNOoR",
-      "versionId": "uYYiebn8",
+      "projectId": "rZNwNOoR", // YueMiLibs
+      "versionId": "uYYiebn8", // v2.2.1
       "dependencyType": "required"
     },
     {
-      "projectId": "lKEzGugV",
-      "versionId": "UmbIiI5H",
+      "projectId": "lKEzGugV", // PlacholderAPI
+      "versionId": "UmbIiI5H", // v2.12.2
       "dependencyType": "optional"
     }
   ]
