@@ -43,10 +43,22 @@ public final class SkillExecutorImpl implements SkillExecutor {
         MechanicWrapper wrapper = wrappers.get(index);
 
         if (wrapper.mechanic() instanceof DelayMechanic delayMechanic) {
-            long ticks = delayMechanic.getTicks();
+            long ticks = 20;
+            org.yuemi.mmomechanics.api.MmoMechanicsApi api = org.bukkit.Bukkit.getServicesManager().load(org.yuemi.mmomechanics.api.MmoMechanicsApi.class);
+            if (api != null) {
+                String parsed = api.parsePlaceholders(context.getCaster(), delayMechanic.getExpression());
+                try {
+                    if (delayMechanic.isSeconds()) {
+                        ticks = (long) (Double.parseDouble(parsed) * 20);
+                    } else {
+                        ticks = Long.parseLong(parsed);
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+            long finalTicks = ticks;
             plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                 runStep(context, wrappers, currentTargets, index + 1);
-            }, ticks);
+            }, finalTicks);
             return;
         }
 

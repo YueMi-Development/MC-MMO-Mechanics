@@ -7,14 +7,20 @@ import org.yuemi.mmomechanics.api.skill.target.Target;
 import java.util.Collection;
 
 public final class DelayMechanic implements Mechanic {
-    private final long ticks;
+    private final String expression;
+    private final boolean isSeconds;
 
-    public DelayMechanic(long ticks) {
-        this.ticks = ticks;
+    public DelayMechanic(@NotNull String expression, boolean isSeconds) {
+        this.expression = expression;
+        this.isSeconds = isSeconds;
     }
 
-    public long getTicks() {
-        return ticks;
+    public @NotNull String getExpression() {
+        return expression;
+    }
+
+    public boolean isSeconds() {
+        return isSeconds;
     }
 
     @Override

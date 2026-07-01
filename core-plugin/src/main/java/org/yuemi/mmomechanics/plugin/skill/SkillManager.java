@@ -114,7 +114,8 @@ public final class SkillManager {
         if (clean.equalsIgnoreCase("lightning")) {
             return new LightningStrikeMechanic();
         } else if (clean.startsWith("delay")) {
-            long ticks = 20; // default 1 second
+            String expression = "20";
+            boolean isSeconds = false;
             if (clean.contains("{") && clean.contains("}")) {
                 String options = clean.substring(clean.indexOf("{") + 1, clean.indexOf("}"));
                 for (String pair : options.split(",")) {
@@ -123,18 +124,16 @@ public final class SkillManager {
                         String key = parts[0].trim();
                         String val = parts[1].trim();
                         if (key.equalsIgnoreCase("ticks")) {
-                            try {
-                                ticks = Long.parseLong(val);
-                            } catch (NumberFormatException ignored) {}
+                            expression = val;
+                            isSeconds = false;
                         } else if (key.equalsIgnoreCase("seconds")) {
-                            try {
-                                ticks = (long) (Double.parseDouble(val) * 20);
-                            } catch (NumberFormatException ignored) {}
+                            expression = val;
+                            isSeconds = true;
                         }
                     }
                 }
             }
-            return new DelayMechanic(ticks);
+            return new DelayMechanic(expression, isSeconds);
         }
         return null;
     }
@@ -145,19 +144,17 @@ public final class SkillManager {
         if (cleanName.equalsIgnoreCase("self")) {
             return new SelfTargeter();
         } else if (cleanName.startsWith("near")) {
-            double radius = 5.0;
+            String radiusExpr = "5.0";
             if (cleanName.contains("{") && cleanName.contains("}")) {
                 String options = cleanName.substring(cleanName.indexOf("{") + 1, cleanName.indexOf("}"));
                 for (String pair : options.split(",")) {
                     String[] parts = pair.split("=");
                     if (parts.length == 2 && parts[0].trim().equalsIgnoreCase("r")) {
-                        try {
-                            radius = Double.parseDouble(parts[1].trim());
-                        } catch (NumberFormatException ignored) {}
+                        radiusExpr = parts[1].trim();
                     }
                 }
             }
-            return new NearTargeter(radius);
+            return new NearTargeter(radiusExpr);
         }
         return null;
     }

@@ -33,6 +33,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
     compileOnly("io.papermc.paper:paper-api:$paperApiVersion")
     compileOnly("org.yuemi:YueMiLibs-api:$yuemiLibsApiVersion")
+    compileOnly("me.clip:placeholderapi:2.12.2")
 }
 
 tasks.withType<JavaCompile>().configureEach {

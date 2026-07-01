@@ -21,6 +21,7 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
 
     private MmoMechanicsApi api;
     private SkillManager skillManager;
+    private boolean placeholderApiEnabled;
 
     @Override
     public void onEnable() {
@@ -43,7 +44,15 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
             }
         }
 
-        this.api = new MmoMechanicsApiImpl(new SkillExecutorImpl(this));
+        this.placeholderApiEnabled = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")
+                && getConfig().getBoolean("hooks.placeholder-api", true);
+
+        if (this.placeholderApiEnabled) {
+            new org.yuemi.mmomechanics.plugin.hook.MmoPlaceholderExpansion(this, skillManager).register();
+            getLogger().info("Successfully hooked into PlaceholderAPI!");
+        }
+
+        this.api = new MmoMechanicsApiImpl(this, new SkillExecutorImpl(this));
 
         getServer().getServicesManager().register(
                 MmoMechanicsApi.class,
@@ -51,6 +60,10 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
                 this,
                 ServicePriority.Normal
         );
+    }
+
+    public boolean isPlaceholderApiEnabled() {
+        return placeholderApiEnabled;
     }
 
     private void migrateConfig() {

@@ -13,10 +13,10 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 public final class NearTargeter implements Targeter {
-    private final double radius;
+    private final String radiusExpression;
 
-    public NearTargeter(double radius) {
-        this.radius = radius;
+    public NearTargeter(@NotNull String radiusExpression) {
+        this.radiusExpression = radiusExpression;
     }
 
     @Override
@@ -26,7 +26,16 @@ public final class NearTargeter implements Targeter {
             return Collections.emptyList();
         }
 
-        Collection<Entity> entities = origin.getWorld().getNearbyEntities(origin, radius, radius, radius);
+        double evaluatedRadius = 5.0;
+        org.yuemi.mmomechanics.api.MmoMechanicsApi api = org.bukkit.Bukkit.getServicesManager().load(org.yuemi.mmomechanics.api.MmoMechanicsApi.class);
+        if (api != null) {
+            String parsed = api.parsePlaceholders(context.getCaster(), radiusExpression);
+            try {
+                evaluatedRadius = Double.parseDouble(parsed);
+            } catch (NumberFormatException ignored) {}
+        }
+
+        Collection<Entity> entities = origin.getWorld().getNearbyEntities(origin, evaluatedRadius, evaluatedRadius, evaluatedRadius);
         
         Entity casterEntity = context.getCaster().getAsEntity();
 
