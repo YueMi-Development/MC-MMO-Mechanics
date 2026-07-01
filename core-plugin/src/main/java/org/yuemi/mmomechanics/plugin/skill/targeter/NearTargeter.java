@@ -12,6 +12,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets entities within a close proximity to the caster.
+ */
 public final class NearTargeter implements Targeter {
     private final String radiusExpression;
 

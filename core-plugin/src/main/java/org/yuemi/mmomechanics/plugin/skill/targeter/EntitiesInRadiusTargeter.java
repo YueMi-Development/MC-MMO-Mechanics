@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets all living entities within a specified radius around the caster.
+ */
 public final class EntitiesInRadiusTargeter implements Targeter {
 
     private final String radiusExpression;

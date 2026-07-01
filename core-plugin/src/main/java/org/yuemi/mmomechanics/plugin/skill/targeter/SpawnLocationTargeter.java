@@ -10,6 +10,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets the spawn location of the world.
+ */
 public final class SpawnLocationTargeter implements Targeter {
     @Override
     public @NotNull Collection<Target> getTargets(@NotNull SkillContext context) {

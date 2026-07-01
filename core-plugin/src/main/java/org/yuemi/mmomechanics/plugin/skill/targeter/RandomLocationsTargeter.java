@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Targets random location coordinates in a radius around the caster.
+ */
 public final class RandomLocationsTargeter implements Targeter {
 
     private static final Random RANDOM = new Random();

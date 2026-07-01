@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
+/**
+ * Targets a specific entity by its unique UUID.
+ */
 public final class UuidTargeter implements Targeter {
 
     private final String uuidExpression;

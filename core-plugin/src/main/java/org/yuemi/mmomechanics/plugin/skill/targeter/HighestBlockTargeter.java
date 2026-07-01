@@ -12,6 +12,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets the highest solid block location directly above or below the caster.
+ */
 public final class HighestBlockTargeter implements Targeter {
     @Override
     public @NotNull Collection<Target> getTargets(@NotNull SkillContext context) {

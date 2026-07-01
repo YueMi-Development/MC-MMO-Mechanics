@@ -14,6 +14,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets the predicted location of the target based on its current movement direction and speed.
+ */
 public final class TargetPredictedLocationTargeter implements Targeter {
 
     private final String ticksExpression;

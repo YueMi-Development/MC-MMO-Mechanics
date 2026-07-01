@@ -12,6 +12,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets the location of the caster's current target.
+ */
 public final class TargetLocationTargeter implements Targeter {
     @Override
     public @NotNull Collection<Target> getTargets(@NotNull SkillContext context) {

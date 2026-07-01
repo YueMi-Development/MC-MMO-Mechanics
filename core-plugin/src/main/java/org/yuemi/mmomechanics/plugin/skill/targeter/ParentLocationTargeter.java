@@ -13,6 +13,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets the location of the parent/summoner of the caster.
+ */
 public final class ParentLocationTargeter implements Targeter {
     @Override
     public @NotNull Collection<Target> getTargets(@NotNull SkillContext context) {

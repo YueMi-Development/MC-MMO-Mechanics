@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Generates point locations forming a sphere shell around the caster.
+ */
 public final class SphereTargeter implements Targeter {
 
     private final String radiusExpression;

@@ -10,6 +10,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets the location stored in a specified skill variable.
+ */
 public final class VariableLocationTargeter implements Targeter {
 
     private final String varName;

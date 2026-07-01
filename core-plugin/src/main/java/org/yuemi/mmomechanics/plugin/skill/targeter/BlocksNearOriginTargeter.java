@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Targets all block locations in a radius around the origin of the skill.
+ */
 public final class BlocksNearOriginTargeter implements Targeter {
 
     private final String radiusExpression;

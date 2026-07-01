@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets the locations of all players within a specified radius.
+ */
 public final class PlayerLocationsInRadiusTargeter implements Targeter {
 
     private final String radiusExpression;

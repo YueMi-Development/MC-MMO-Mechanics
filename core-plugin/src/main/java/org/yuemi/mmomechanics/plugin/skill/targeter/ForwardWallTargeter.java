@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Generates a wall-like plane grid of locations in front of the caster.
+ */
 public final class ForwardWallTargeter implements Targeter {
 
     private final String widthExpression;

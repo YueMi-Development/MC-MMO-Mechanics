@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets players located within a ring (between a minimum and maximum radius).
+ */
 public final class PlayersInRingTargeter implements Targeter {
 
     private final String minRadiusExpression;

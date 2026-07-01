@@ -11,6 +11,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets a specific set of coordinates (X, Y, Z) in the world.
+ */
 public final class CoordinateLocationTargeter implements Targeter {
 
     private final String xExpr;

@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Generates a 3D grid of target locations forming a rectangle/cuboid outline.
+ */
 public final class RectangleTargeter implements Targeter {
 
     private final String widthExpression;

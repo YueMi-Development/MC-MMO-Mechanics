@@ -12,6 +12,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets a specific player online on the server by their name.
+ */
 public final class PlayerByNameTargeter implements Targeter {
 
     private final String nameExpression;

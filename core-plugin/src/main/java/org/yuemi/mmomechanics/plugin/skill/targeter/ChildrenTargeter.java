@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets any entities that were summoned by or are tethers/pets of the caster.
+ */
 public final class ChildrenTargeter implements Targeter {
     @Override
     public @NotNull Collection<Target> getTargets(@NotNull SkillContext context) {

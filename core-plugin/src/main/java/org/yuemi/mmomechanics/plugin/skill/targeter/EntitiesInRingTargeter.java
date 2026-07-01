@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets all living entities within a ring (between a minimum and maximum radius) around the caster.
+ */
 public final class EntitiesInRingTargeter implements Targeter {
 
     private final String minRadiusExpression;

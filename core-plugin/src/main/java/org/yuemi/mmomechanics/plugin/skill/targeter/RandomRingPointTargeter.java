@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Targets a random point location along a ring around the caster.
+ */
 public final class RandomRingPointTargeter implements Targeter {
 
     private static final Random RANDOM = new Random();

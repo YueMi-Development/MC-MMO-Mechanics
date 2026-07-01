@@ -11,6 +11,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets a location directly in front of where the caster is facing.
+ */
 public final class ForwardTargeter implements Targeter {
 
     private final String distanceExpression;

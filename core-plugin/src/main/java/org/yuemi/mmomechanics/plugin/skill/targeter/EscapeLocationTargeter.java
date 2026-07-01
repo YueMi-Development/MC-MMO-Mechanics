@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
+/**
+ * Targets a nearby safe location that the caster can teleport to (similar to an Enderman's escape).
+ */
 public final class EscapeLocationTargeter implements Targeter {
 
     private static final Random RANDOM = new Random();

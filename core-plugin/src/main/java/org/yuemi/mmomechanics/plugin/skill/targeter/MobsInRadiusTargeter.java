@@ -15,6 +15,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets monsters or vanilla mobs of specified types within a radius.
+ */
 public final class MobsInRadiusTargeter implements Targeter {
 
     private final String radiusExpression;

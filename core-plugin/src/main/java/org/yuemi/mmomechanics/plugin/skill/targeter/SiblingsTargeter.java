@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets sibling entities (other pets/summons sharing the same owner as the caster).
+ */
 public final class SiblingsTargeter implements Targeter {
     @Override
     public @NotNull Collection<Target> getTargets(@NotNull SkillContext context) {

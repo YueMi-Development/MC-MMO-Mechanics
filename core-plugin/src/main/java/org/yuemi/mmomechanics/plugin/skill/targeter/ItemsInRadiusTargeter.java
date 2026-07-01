@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets dropped items on the ground within a specified radius.
+ */
 public final class ItemsInRadiusTargeter implements Targeter {
 
     private final String radiusExpression;

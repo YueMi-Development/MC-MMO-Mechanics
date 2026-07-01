@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Generates a list of locations forming a cone shape on the ground in front of the caster.
+ */
 public final class ConeTargeter implements Targeter {
 
     private final String angleExpression;

@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Targets the single nearest player in a radius around the caster.
+ */
 public final class NearestPlayerTargeter implements Targeter {
 
     private final String radiusExpression;

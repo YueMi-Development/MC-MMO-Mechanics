@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Generates points forming a ring of target locations around the caster.
+ */
 public final class RingTargeter implements Targeter {
 
     private final String radiusExpression;

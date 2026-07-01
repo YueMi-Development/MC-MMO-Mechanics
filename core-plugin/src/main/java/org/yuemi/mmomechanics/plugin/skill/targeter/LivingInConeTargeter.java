@@ -15,6 +15,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets living entities located inside a cone sector in front of the caster.
+ */
 public final class LivingInConeTargeter implements Targeter {
 
     private final String angleExpression;

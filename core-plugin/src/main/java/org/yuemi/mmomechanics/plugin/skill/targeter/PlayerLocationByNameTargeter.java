@@ -12,6 +12,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Targets the current location of a specific player by their name.
+ */
 public final class PlayerLocationByNameTargeter implements Targeter {
 
     private final String nameExpression;

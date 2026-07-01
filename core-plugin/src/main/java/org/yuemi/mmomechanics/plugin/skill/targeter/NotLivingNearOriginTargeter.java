@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Targets non-living entities (like items or armor stands) within a radius around the origin.
+ */
 public final class NotLivingNearOriginTargeter implements Targeter {
 
     private final String radiusExpression;

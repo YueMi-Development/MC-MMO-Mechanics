@@ -10,6 +10,9 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * Targets all players online on the server.
+ */
 public final class PlayersOnServerTargeter implements Targeter {
     @Override
     public @NotNull Collection<Target> getTargets(@NotNull SkillContext context) {
