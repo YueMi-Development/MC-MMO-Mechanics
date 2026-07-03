@@ -2,7 +2,7 @@ package org.yuemi.mmomechanics.plugin.skill.parser.targeter;
 
 import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
-import org.yuemi.mmomechanics.plugin.skill.targeter.ProjectileForwardTargeter;
+import org.yuemi.mmomechanics.plugin.skill.targeter.location.single.ProjectileForwardTargeter;
 
 public final class ProjectileForwardParser {
     public @Nullable Targeter parse(@Nullable String name) {

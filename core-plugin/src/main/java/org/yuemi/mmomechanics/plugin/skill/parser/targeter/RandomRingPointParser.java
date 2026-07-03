@@ -2,7 +2,7 @@ package org.yuemi.mmomechanics.plugin.skill.parser.targeter;
 
 import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
-import org.yuemi.mmomechanics.plugin.skill.targeter.RandomRingPointTargeter;
+import org.yuemi.mmomechanics.plugin.skill.targeter.location.multi.RandomRingPointTargeter;
 
 public final class RandomRingPointParser {
     public @Nullable Targeter parse(@Nullable String name) {

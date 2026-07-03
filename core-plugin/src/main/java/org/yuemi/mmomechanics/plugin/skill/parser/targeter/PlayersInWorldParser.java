@@ -2,7 +2,7 @@ package org.yuemi.mmomechanics.plugin.skill.parser.targeter;
 
 import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
-import org.yuemi.mmomechanics.plugin.skill.targeter.PlayersInWorldTargeter;
+import org.yuemi.mmomechanics.plugin.skill.targeter.entity.multi.PlayersInWorldTargeter;
 
 public final class PlayersInWorldParser {
     public @Nullable Targeter parse(@Nullable String name) {

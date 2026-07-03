@@ -2,7 +2,7 @@ package org.yuemi.mmomechanics.plugin.skill.parser.targeter;
 
 import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
-import org.yuemi.mmomechanics.plugin.skill.targeter.TargetPredictedLocationTargeter;
+import org.yuemi.mmomechanics.plugin.skill.targeter.location.single.TargetPredictedLocationTargeter;
 
 public final class TargetPredictedLocationParser {
     public @Nullable Targeter parse(@Nullable String name) {

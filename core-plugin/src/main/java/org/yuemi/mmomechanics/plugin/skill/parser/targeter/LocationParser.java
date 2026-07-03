@@ -2,8 +2,8 @@ package org.yuemi.mmomechanics.plugin.skill.parser.targeter;
 
 import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
-import org.yuemi.mmomechanics.plugin.skill.targeter.CoordinateLocationTargeter;
-import org.yuemi.mmomechanics.plugin.skill.targeter.SelfLocationTargeter;
+import org.yuemi.mmomechanics.plugin.skill.targeter.location.single.CoordinateLocationTargeter;
+import org.yuemi.mmomechanics.plugin.skill.targeter.location.single.SelfLocationTargeter;
 
 public final class LocationParser {
     public @Nullable Targeter parse(@Nullable String name) {

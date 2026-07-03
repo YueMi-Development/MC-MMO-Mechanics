@@ -2,7 +2,7 @@ package org.yuemi.mmomechanics.plugin.skill.parser.targeter;
 
 import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
-import org.yuemi.mmomechanics.plugin.skill.targeter.HighestBlockTargeter;
+import org.yuemi.mmomechanics.plugin.skill.targeter.location.single.HighestBlockTargeter;
 
 public final class HighestBlockParser {
     public @Nullable Targeter parse(@Nullable String name) {
