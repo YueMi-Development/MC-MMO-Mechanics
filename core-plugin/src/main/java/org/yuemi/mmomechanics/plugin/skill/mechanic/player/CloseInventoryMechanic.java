@@ -1,7 +1,6 @@
-package org.yuemi.mmomechanics.plugin.skill.mechanic;
+package org.yuemi.mmomechanics.plugin.skill.mechanic.player;
 
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
@@ -9,16 +8,18 @@ import org.yuemi.mmomechanics.api.skill.target.Target;
 
 import java.util.Collection;
 
-public final class LightningStrikeMechanic implements Mechanic {
+/**
+ * Closes open container screen GUIs.
+ */
+public final class CloseInventoryMechanic implements Mechanic {
 
     @Override
     public void execute(@NotNull SkillContext context, @NotNull Collection<Target> targets) {
         for (Target target : targets) {
-            Location loc = target.getLocation();
-            World world = loc.getWorld();
-            if (world != null) {
-                world.strikeLightning(loc);
+            if (target.getAsEntity() instanceof Player player) {
+                player.closeInventory();
             }
         }
     }
 }
+
