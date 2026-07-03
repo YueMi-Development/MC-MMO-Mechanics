@@ -45,10 +45,13 @@ public final class SkillManager {
                     java.util.zip.ZipEntry entry = entries.nextElement();
                     String name = entry.getName();
                     if (name.startsWith("skills/") && name.endsWith(".json5")) {
-                        try {
-                            plugin.saveResource(name, false);
-                        } catch (IllegalArgumentException ignored) {
-                            // Thrown if already exists
+                        File outFile = new File(plugin.getDataFolder(), name);
+                        if (!outFile.exists()) {
+                            try {
+                                plugin.saveResource(name, false);
+                            } catch (IllegalArgumentException ignored) {
+                                // Thrown if already exists
+                            }
                         }
                     }
                 }
