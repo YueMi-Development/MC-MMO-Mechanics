@@ -1,0 +1,9 @@
+org.yuemi.mmomechanics.api
+org.yuemi.mmomechanics.api.skill
+org.yuemi.mmomechanics.api.skill.condition
+org.yuemi.mmomechanics.api.skill.context
+org.yuemi.mmomechanics.api.skill.executor
+org.yuemi.mmomechanics.api.skill.mechanic
+org.yuemi.mmomechanics.api.skill.target
+org.yuemi.mmomechanics.api.skill.targeter
+org.yuemi.mmomechanics.api.skill.trigger
