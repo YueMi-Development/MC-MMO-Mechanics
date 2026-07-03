@@ -20,6 +20,7 @@ public final class MechanicParser {
              * System Mechanic
              */
             case "delay" -> new DelayParser().parse(clean);
+            case "skill", "cast", "metaskill" -> new SkillParser().parse(clean);
 
             /**
              * Effect Mechanic

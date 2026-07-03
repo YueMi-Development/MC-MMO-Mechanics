@@ -81,6 +81,10 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
         return placeholderApiEnabled;
     }
 
+    public SkillManager getSkillManager() {
+        return skillManager;
+    }
+
     private void migrateConfig() {
         File configFile = new File(getDataFolder(), "config.yml");
         if (configFile.exists()) {
