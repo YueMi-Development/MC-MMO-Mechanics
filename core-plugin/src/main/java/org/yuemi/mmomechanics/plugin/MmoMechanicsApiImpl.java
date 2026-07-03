@@ -50,4 +50,24 @@ final class MmoMechanicsApiImpl implements MmoMechanicsApi {
         }
         return text;
     }
+
+    @Override
+    public boolean castSkill(@NotNull java.util.UUID casterUuid, @NotNull String skillId) {
+        org.bukkit.entity.Entity entity = org.bukkit.Bukkit.getEntity(casterUuid);
+        if (entity == null) {
+            return false;
+        }
+        java.util.Optional<org.yuemi.mmomechanics.api.skill.Metaskill> skillOpt = plugin.getSkillManager().getSkill(skillId);
+        if (skillOpt.isEmpty()) {
+            return false;
+        }
+        org.yuemi.mmomechanics.api.skill.Metaskill skill = skillOpt.get();
+        org.yuemi.mmomechanics.api.skill.trigger.Trigger trigger = () -> "API";
+        org.yuemi.mmomechanics.api.skill.context.SkillContext context = new org.yuemi.mmomechanics.api.skill.context.SkillContext(
+                new org.yuemi.mmomechanics.api.skill.target.EntityTarget(entity),
+                trigger
+        );
+        skill.execute(context, java.util.Collections.singletonList(context.getCaster()));
+        return true;
+    }
 }

@@ -1,0 +1,31 @@
+{
+  // Example skill configuration striking lightning on every nearby entity within 4 blocks, 3 times with a 2-second delay.
+  name: "Lightning Radius Storm",
+  mechanics: [
+    {
+      mechanic: "lightning",
+      targeter: "entitiesinradius{r=4}",
+      conditions: []
+    },
+    {
+      mechanic: "delay{seconds=2}",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "lightning",
+      targeter: "entitiesinradius{r=4}",
+      conditions: []
+    },
+    {
+      mechanic: "delay{seconds=2}",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "lightning",
+      targeter: "entitiesinradius{r=4}",
+      conditions: []
+    }
+  ]
+}

@@ -19,4 +19,6 @@ public interface MmoMechanicsApi {
     @NotNull SkillExecutor getSkillExecutor();
 
     @NotNull String parsePlaceholders(@Nullable Target target, @NotNull String text);
+
+    boolean castSkill(@NotNull java.util.UUID casterUuid, @NotNull String skillId);
 }
