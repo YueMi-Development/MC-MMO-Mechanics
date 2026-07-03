@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
 import com.destroystokyo.paper.event.entity.CreeperIgniteEvent;
 import org.yuemi.libs.api.event.EventApi;
+import org.yuemi.libs.api.event.EventApiProvider;
 import org.yuemi.mmomechanics.api.skill.target.EntityTarget;
 import org.yuemi.mmomechanics.api.skill.target.LocationTarget;
 import org.yuemi.mmomechanics.api.skill.target.Target;
@@ -50,7 +51,7 @@ public final class TriggerRegistration {
     }
 
     public void register() {
-        EventApi eventApi = Bukkit.getServicesManager().load(EventApi.class);
+        EventApi eventApi = EventApiProvider.getApi();
         if (eventApi == null) {
             plugin.getLogger().warning("YueMiLibs EventApi service not found. Triggers will not be registered!");
             return;
