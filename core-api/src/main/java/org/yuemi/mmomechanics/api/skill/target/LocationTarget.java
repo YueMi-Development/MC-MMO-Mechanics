@@ -7,9 +7,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+/**
+ * A Target implementation representing a specific Block or World Location.
+ */
 public final class LocationTarget implements Target {
     private final Location location;
 
+    /**
+     * Constructs a LocationTarget.
+     *
+     * @param location the targeted location
+     */
     public LocationTarget(@NotNull Location location) {
         this.location = Objects.requireNonNull(location, "Location cannot be null");
     }

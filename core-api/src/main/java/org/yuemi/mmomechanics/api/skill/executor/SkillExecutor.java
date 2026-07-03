@@ -7,7 +7,17 @@ import org.yuemi.mmomechanics.api.skill.target.Target;
 
 import java.util.Collection;
 
+/**
+ * Handles executing a sequence of mechanics on targets within a SkillContext.
+ */
 public interface SkillExecutor {
+    /**
+     * Executes the list of mechanics sequentially.
+     *
+     * @param context the context of the skill execution
+     * @param initialTargets the initial targets for the execution
+     * @param mechanics the collection of mechanics to run
+     */
     void run(
             @NotNull SkillContext context,
             @NotNull Collection<Target> initialTargets,

@@ -6,9 +6,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ * A Target implementation representing a specific Entity.
+ */
 public final class EntityTarget implements Target {
     private final Entity entity;
 
+    /**
+     * Constructs an EntityTarget.
+     *
+     * @param entity the targeted entity
+     */
     public EntityTarget(@NotNull Entity entity) {
         this.entity = Objects.requireNonNull(entity, "Entity cannot be null");
     }

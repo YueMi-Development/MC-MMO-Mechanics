@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 public interface MmoMechanicsApiProvider {
 
     /**
+     * Gets the active instance of the MmoMechanicsApi.
+     *
      * @return active API instance
      */
     @NotNull
