@@ -7,8 +7,6 @@ import org.yuemi.mmomechanics.plugin.command.MmoCommand;
 import org.yuemi.mmomechanics.plugin.command.subcommands.CastCommand;
 import org.yuemi.mmomechanics.plugin.command.subcommands.ReloadCommand;
 import org.yuemi.mmomechanics.plugin.config.migration.ConfigMigrator;
-import org.yuemi.mmomechanics.plugin.config.migration.MigrationStep;
-import org.yuemi.mmomechanics.plugin.config.migration.MigrationStep1To2;
 import org.yuemi.mmomechanics.plugin.skill.SkillManager;
 import org.yuemi.mmomechanics.plugin.skill.executor.SkillExecutorImpl;
 import org.yuemi.mmomechanics.plugin.skill.trigger.TriggerBindingManager;
@@ -17,11 +15,8 @@ import org.yuemi.mmomechanics.plugin.skill.trigger.TimerManager;
 import org.yuemi.mmomechanics.plugin.skill.trigger.TriggerRegistration;
 
 import java.io.File;
-import java.util.List;
 
 public final class MmoMechanicsPlugin extends JavaPlugin {
-
-    private static final int LATEST_CONFIG_VERSION = 2;
 
     private MmoMechanicsApi api;
     private SkillManager skillManager;
@@ -88,8 +83,7 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
     private void migrateConfig() {
         File configFile = new File(getDataFolder(), "config.yml");
         if (configFile.exists()) {
-            List<MigrationStep> steps = List.of(new MigrationStep1To2());
-            ConfigMigrator migrator = new ConfigMigrator(LATEST_CONFIG_VERSION, steps, getLogger());
+            ConfigMigrator migrator = new ConfigMigrator(this);
             migrator.migrate(configFile);
             reloadConfig();
         }
