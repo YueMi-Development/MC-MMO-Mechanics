@@ -14,6 +14,14 @@ public interface Metaskill extends Mechanic {
     
     @NotNull Collection<MechanicWrapper> getMechanics();
 
+    default @NotNull Collection<String> getTriggers() {
+        return java.util.Collections.emptyList();
+    }
+
+    default @org.jetbrains.annotations.Nullable BindConfig getBindConfig() {
+        return null;
+    }
+
     @Override
     default void execute(@NotNull SkillContext context, @NotNull Collection<Target> targets) {
         org.yuemi.mmomechanics.api.MmoMechanicsApi api = org.bukkit.Bukkit.getServicesManager().load(org.yuemi.mmomechanics.api.MmoMechanicsApi.class);

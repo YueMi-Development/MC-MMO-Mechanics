@@ -11,6 +11,10 @@ import org.yuemi.mmomechanics.plugin.config.migration.MigrationStep;
 import org.yuemi.mmomechanics.plugin.config.migration.MigrationStep1To2;
 import org.yuemi.mmomechanics.plugin.skill.SkillManager;
 import org.yuemi.mmomechanics.plugin.skill.executor.SkillExecutorImpl;
+import org.yuemi.mmomechanics.plugin.skill.trigger.TriggerBindingManager;
+import org.yuemi.mmomechanics.plugin.skill.trigger.TriggerManager;
+import org.yuemi.mmomechanics.plugin.skill.trigger.TimerManager;
+import org.yuemi.mmomechanics.plugin.skill.trigger.TriggerRegistration;
 
 import java.io.File;
 import java.util.List;
@@ -21,6 +25,9 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
 
     private MmoMechanicsApi api;
     private SkillManager skillManager;
+    private TriggerBindingManager triggerBindingManager;
+    private TriggerManager triggerManager;
+    private TimerManager timerManager;
     private boolean placeholderApiEnabled;
 
     @Override
@@ -31,6 +38,14 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
         // Load Skill Manager & load JSON5 skill configurations
         this.skillManager = new SkillManager(this);
         this.skillManager.loadSkills();
+
+        // Initialize Triggers
+        this.triggerBindingManager = new TriggerBindingManager(this, skillManager);
+        this.triggerManager = new TriggerManager(triggerBindingManager);
+        this.timerManager = new TimerManager(this, triggerBindingManager, triggerManager);
+        this.timerManager.start();
+
+        new TriggerRegistration(this, triggerManager, timerManager).register();
 
         // Register Command if enabled
         if (getConfig().getBoolean("features.command-enabled", true)) {
@@ -78,6 +93,9 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (timerManager != null) {
+            timerManager.stop();
+        }
         if (api != null) {
             getServer().getServicesManager().unregister(MmoMechanicsApi.class, api);
         }

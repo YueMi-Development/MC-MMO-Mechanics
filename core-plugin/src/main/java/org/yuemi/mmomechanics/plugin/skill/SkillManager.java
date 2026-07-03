@@ -11,6 +11,7 @@ import org.yuemi.mmomechanics.api.skill.targeter.Targeter;
 import org.yuemi.mmomechanics.plugin.skill.parser.condition.ConditionParser;
 import org.yuemi.mmomechanics.plugin.skill.parser.mechanic.MechanicParser;
 import org.yuemi.mmomechanics.plugin.skill.parser.targeter.TargeterParser;
+import org.yuemi.mmomechanics.api.skill.BindConfig;
 
 import java.io.File;
 import java.io.InputStream;
@@ -93,6 +94,29 @@ public final class SkillManager {
             }
         }
 
+        List<String> triggers = dto.triggers() != null ? dto.triggers() : Collections.emptyList();
+        BindConfig bindConfig = null;
+        if (dto.bind() != null) {
+            BindConfigDto bindDto = dto.bind();
+            bindConfig = new BindConfig() {
+                @Override
+                public @NotNull Collection<String> getEntityTypes() {
+                    return bindDto.types() != null ? bindDto.types() : Collections.emptyList();
+                }
+
+                @Override
+                public boolean isGlobal() {
+                    return bindDto.global() != null && bindDto.global();
+                }
+
+                @Override
+                public @NotNull Collection<String> getUuids() {
+                    return bindDto.uuids() != null ? bindDto.uuids() : Collections.emptyList();
+                }
+            };
+        }
+
+        BindConfig finalBindConfig = bindConfig;
         return new Metaskill() {
             @Override
             public @NotNull String getName() {
@@ -102,6 +126,16 @@ public final class SkillManager {
             @Override
             public @NotNull Collection<MechanicWrapper> getMechanics() {
                 return wrappers;
+            }
+
+            @Override
+            public @NotNull Collection<String> getTriggers() {
+                return triggers;
+            }
+
+            @Override
+            public @org.jetbrains.annotations.Nullable BindConfig getBindConfig() {
+                return finalBindConfig;
             }
         };
     }
@@ -114,9 +148,21 @@ public final class SkillManager {
         return loadedSkills.keySet();
     }
 
+    public @NotNull Collection<Metaskill> getLoadedSkills() {
+        return loadedSkills.values();
+    }
+
     public static record SkillConfigDto(
         String name,
+        List<String> triggers,
+        BindConfigDto bind,
         List<MechanicConfigDto> mechanics
+    ) {}
+
+    public static record BindConfigDto(
+        List<String> types,
+        Boolean global,
+        List<String> uuids
     ) {}
 
     public static record MechanicConfigDto(
