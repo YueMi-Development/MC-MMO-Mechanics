@@ -78,6 +78,7 @@ public class ConfigMigrator {
             if (MigrationStep.class.isAssignableFrom(clazz) && !clazz.isInterface() && !java.lang.reflect.Modifier.isAbstract(clazz.getModifiers())) {
                 MigrationStep step = (MigrationStep) clazz.getDeclaredConstructor().newInstance();
                 list.add(step);
+                logger.fine("Discovered config migration step: " + clazz.getSimpleName() + " (Target version: " + step.getTargetVersion() + ")");
             }
         } catch (Exception ignored) {
         }
@@ -93,6 +94,7 @@ public class ConfigMigrator {
         for (MigrationStep step : steps) {
             if (currentVersion == step.getTargetVersion() - 1) {
                 int oldVersion = currentVersion;
+                logger.fine("Applying config migration step: " + step.getClass().getSimpleName() + " (Target version: " + step.getTargetVersion() + ")");
                 step.migrate(config);
                 currentVersion = step.getTargetVersion();
                 config.set("config-version", currentVersion);
