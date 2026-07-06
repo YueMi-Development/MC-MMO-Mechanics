@@ -1,0 +1,16 @@
+{
+  // Skill that gives speed and resistance to the caster
+  name: "Speed Shield",
+  mechanics: [
+    {
+      mechanic: "potion{type=speed;duration=100;level=2}",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "potion{type=resistance;duration=100;level=1}",
+      targeter: "self",
+      conditions: []
+    }
+  ]
+}

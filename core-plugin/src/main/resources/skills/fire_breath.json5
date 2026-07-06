@@ -1,0 +1,16 @@
+{
+  // Skill that ignites and damages all entities in a cone in front of the caster
+  name: "Fire Breath",
+  mechanics: [
+    {
+      mechanic: "ignite{ticks=60}",
+      targeter: "livingincone{r=8;a=45}",
+      conditions: []
+    },
+    {
+      mechanic: "damage{amount=6}",
+      targeter: "livingincone{r=8;a=45}",
+      conditions: []
+    }
+  ]
+}
