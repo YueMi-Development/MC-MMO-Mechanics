@@ -24,7 +24,16 @@ public final class PotionParser {
         
         PotionEffectType effectType = null;
         if (!typeStr.isEmpty()) {
-            effectType = PotionEffectType.getByName(typeStr.toUpperCase());
+            try {
+                effectType = PotionEffectType.getByName(typeStr.toUpperCase());
+            } catch (Throwable t) {
+                try {
+                    org.bukkit.NamespacedKey key = org.bukkit.NamespacedKey.fromString(typeStr.toLowerCase());
+                    if (key != null) {
+                        effectType = PotionEffectType.getByKey(key);
+                    }
+                } catch (Throwable ignored) {}
+            }
         }
 
         if (clear && typeStr.isEmpty()) {

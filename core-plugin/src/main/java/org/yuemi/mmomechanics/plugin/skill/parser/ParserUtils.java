@@ -31,7 +31,7 @@ public final class ParserUtils {
                     inQuotes = true;
                     quoteChar = c;
                 }
-            } else if (c == ',' && !inQuotes) {
+            } else if ((c == ',' || c == ';') && !inQuotes) {
                 parsePair(current.toString(), map);
                 current.setLength(0);
             } else {
