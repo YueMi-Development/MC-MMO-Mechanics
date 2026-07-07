@@ -18,6 +18,7 @@ public final class ParserUtils {
         boolean inQuotes = false;
         char quoteChar = 0;
         
+        boolean useSemicolon = optionsStr.contains(";");
         for (int i = 0; i < optionsStr.length(); i++) {
             char c = optionsStr.charAt(i);
             if ((c == '"' || c == '\'') && (i == 0 || optionsStr.charAt(i - 1) != '\\')) {
@@ -31,7 +32,7 @@ public final class ParserUtils {
                     inQuotes = true;
                     quoteChar = c;
                 }
-            } else if ((c == ',' || c == ';') && !inQuotes) {
+            } else if (((useSemicolon && c == ';') || (!useSemicolon && c == ',')) && !inQuotes) {
                 parsePair(current.toString(), map);
                 current.setLength(0);
             } else {
