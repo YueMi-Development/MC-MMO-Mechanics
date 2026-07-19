@@ -6,7 +6,6 @@ import org.yuemi.mmomechanics.api.MmoMechanicsApi;
 import org.yuemi.mmomechanics.plugin.command.MmoCommand;
 import org.yuemi.mmomechanics.plugin.command.subcommands.CastCommand;
 import org.yuemi.mmomechanics.plugin.command.subcommands.ReloadCommand;
-import org.yuemi.mmomechanics.plugin.config.migration.ConfigMigrator;
 import org.yuemi.mmomechanics.plugin.skill.SkillManager;
 import org.yuemi.mmomechanics.plugin.skill.executor.SkillExecutorImpl;
 import org.yuemi.mmomechanics.plugin.skill.trigger.TriggerBindingManager;
@@ -27,8 +26,8 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        migrateConfig();
+        new org.yuemi.config.api.ConfigManager(this, "org.yuemi.mmomechanics.plugin.config.migration").loadAndMigrate(this);
+        reloadConfig();
 
         // Load Skill Manager & load JSON5 skill configurations
         this.skillManager = new SkillManager(this);
@@ -78,15 +77,6 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
 
     public SkillManager getSkillManager() {
         return skillManager;
-    }
-
-    private void migrateConfig() {
-        File configFile = new File(getDataFolder(), "config.yml");
-        if (configFile.exists()) {
-            ConfigMigrator migrator = new ConfigMigrator(this);
-            migrator.migrate(configFile);
-            reloadConfig();
-        }
     }
 
     @Override
