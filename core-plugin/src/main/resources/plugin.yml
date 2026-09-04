@@ -6,6 +6,7 @@ contributors: [${contributors}]
 api-version: '${apiVersion}'
 softdepend: [
   YueMiLibs,
+  MmoEssence,
   PlaceholderAPI
 ]
 
