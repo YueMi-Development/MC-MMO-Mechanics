@@ -4,16 +4,16 @@ Skill system engine for PaperMC servers. Defines skills via JSON5 configs with t
 
 ## Stack
 - PaperMC 1.21+, Java 21, Gradle (Kotlin DSL)
-- Soft-depends: YueMiLibs, MmoEssence
+- Soft-depends: YueMiLibs, MmoEssence (optional hook)
 
-## Skill Structure (JSON5)
+## Skill Configuration (JSON5)
 ```json5
 {
   name: "Fire Breath",
   triggers: ["onAttack"],
   mechanics: [
     {
-      mechanic: "ignite{ticks=60}",
+      mechanic: "damage{amount=10;element=FIRE}",
       targeter: "livingincone{r=8;a=45}",
       conditions: []
     }
@@ -29,10 +29,14 @@ Skill system engine for PaperMC servers. Defines skills via JSON5 configs with t
 | Mechanic | `Mechanic` | The action (damage, lightning, potion, particle, etc.) |
 | Condition | `Condition` | Gate check (isday, isnight, etc.) |
 
-## Key Parsers
-- `ConditionParser` - Parses condition types
-- `MechanicParser` - Parses mechanic types (~40 types)
-- `TargeterParser` - Parses targeter types (~60 types)
+## MmoEssence Integration
+When `hooks.mmo-essence: true` in config:
+- Damage mechanics can specify `element=FIRE` etc.
+- `EssenceHook.getDamageMultiplier()` applies essence-based scaling
+- Falls back to physical damage (1.0 multiplier) if not specified
+
+## Key Methods
+- `DamageMechanic.calculateDamage(baseDamage, caster)` - Future-proof damage calculation with essence scaling
 
 ## Conventions
 - Packages: `org.yuemi.mmomechanics.{api,plugin}`

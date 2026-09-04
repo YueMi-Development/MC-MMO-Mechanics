@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.plugin.skill.mechanic.entity.general.DamageMechanic;
 import org.yuemi.mmomechanics.plugin.skill.parser.ParserUtils;
+import org.yuemi.mmoessence.api.ElementType;
 
 import java.util.Map;
 
@@ -37,6 +38,17 @@ public final class DamageParser {
         if (options.containsKey("ignorearmor")) ignoreArmor = Boolean.parseBoolean(options.get("ignorearmor"));
         else if (options.containsKey("ia")) ignoreArmor = Boolean.parseBoolean(options.get("ia"));
 
-        return new DamageMechanic(type, value, ignoreArmor);
+        // Parse element parameter for elemental damage
+        ElementType element = null;
+        if (options.containsKey("element")) {
+            String elementStr = options.get("element").toUpperCase();
+            try {
+                element = ElementType.valueOf(elementStr);
+            } catch (IllegalArgumentException ignored) {
+                // Invalid element, ignore
+            }
+        }
+
+        return new DamageMechanic(type, value, ignoreArmor, element);
     }
 }

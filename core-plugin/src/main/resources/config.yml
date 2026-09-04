@@ -1,7 +1,8 @@
-config-version: 2
+config-version: 3
 
 hooks:
   placeholder-api: true
+  mmo-essence: true
 
 features:
   command-enabled: true
