@@ -1,0 +1,11 @@
+{
+  // Skill: when Pendant of Speed is equipped, grants speed effect
+  name: "Speed Aura",
+  mechanics: [
+    {
+      mechanic: "potion{type=speed;duration=999999;level=0}",
+      targeter: "self",
+      conditions: []
+    }
+  ]
+}

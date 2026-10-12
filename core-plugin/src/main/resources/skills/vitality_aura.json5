@@ -1,0 +1,16 @@
+{
+  // Skill: when Amulet of Vitality is equipped, increases max health
+  name: "Vitality Aura",
+  mechanics: [
+    {
+      mechanic: "potion{type=health_boost;duration=999999;level=1}",
+      targeter: "self",
+      conditions: []
+    },
+    {
+      mechanic: "heal{amount=4}",
+      targeter: "self",
+      conditions: []
+    }
+  ]
+}

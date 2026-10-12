@@ -1,0 +1,11 @@
+{
+  // Skill: when Cloth Gloves are equipped, gives haste for faster mining
+  name: "Mining Speed",
+  mechanics: [
+    {
+      mechanic: "potion{type=haste;duration=999999;level=1}",
+      targeter: "self",
+      conditions: []
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  // Skill: when Sapphire Ring is equipped, grants water breathing aura
+  name: "Water Breathing Aura",
+  mechanics: [
+    {
+      mechanic: "potion{type=water_breathing;duration=999999;level=0}",
+      targeter: "self",
+      conditions: []
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  // Skill: when Steel Belt is equipped, grants armor bonus to wearer
+  name: "Armor Boost",
+  mechanics: [
+    {
+      mechanic: "potion{type=resistance;duration=999999;level=0}",
+      targeter: "self",
+      conditions: []
+    }
+  ]
+}

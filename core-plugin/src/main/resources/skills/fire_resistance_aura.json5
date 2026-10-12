@@ -1,0 +1,11 @@
+{
+  // Skill: when Ruby Ring is equipped, grants fire resistance aura
+  name: "Fire Resistance Aura",
+  mechanics: [
+    {
+      mechanic: "potion{type=fire_resistance;duration=999999;level=0}",
+      targeter: "self",
+      conditions: []
+    }
+  ]
+}

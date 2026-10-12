@@ -1,0 +1,11 @@
+{
+  // Skill: when attacking with Leather Gloves, deals extra damage
+  name: "Attack Boost",
+  mechanics: [
+    {
+      mechanic: "damage{amount=2}",
+      targeter: "casterTarget",
+      conditions: []
+    }
+  ]
+}
