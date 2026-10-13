@@ -13,10 +13,14 @@ final class MmoMechanicsApiImpl implements MmoMechanicsApi {
     private final MmoMechanicsPlugin plugin;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final SkillExecutor skillExecutor;
+    private final org.yuemi.mmomechanics.plugin.skill.trigger.TriggerManager triggerManager;
 
-    public MmoMechanicsApiImpl(@NotNull MmoMechanicsPlugin plugin, @NotNull SkillExecutor skillExecutor) {
+    public MmoMechanicsApiImpl(@NotNull MmoMechanicsPlugin plugin,
+                               @NotNull SkillExecutor skillExecutor,
+                               @NotNull org.yuemi.mmomechanics.plugin.skill.trigger.TriggerManager triggerManager) {
         this.plugin = plugin;
         this.skillExecutor = skillExecutor;
+        this.triggerManager = triggerManager;
     }
 
     @Override
@@ -68,6 +72,15 @@ final class MmoMechanicsApiImpl implements MmoMechanicsApi {
                 trigger
         );
         skill.execute(context, java.util.Collections.singletonList(context.getCaster()));
+        return true;
+    }
+
+    @Override
+    public boolean fireTrigger(@NotNull java.util.UUID casterUuid, @NotNull String triggerId) {
+        if (triggerManager == null) return false;
+        org.bukkit.entity.Entity entity = org.bukkit.Bukkit.getEntity(casterUuid);
+        if (entity == null) return false;
+        triggerManager.executeTrigger(entity, triggerId, null);
         return true;
     }
 }

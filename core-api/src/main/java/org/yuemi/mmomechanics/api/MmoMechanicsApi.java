@@ -55,4 +55,18 @@ public interface MmoMechanicsApi {
      * @return true if the skill was successfully cast, false otherwise
      */
     boolean castSkill(@NotNull java.util.UUID casterUuid, @NotNull String skillId);
+
+    /**
+     * Executes any skill bound to the given caster that has the specified trigger
+     * in its {@code triggers} list (e.g. {@code "onEquip"}, {@code "onUnequip"},
+     * {@code "onAttack"}). Unlike {@link #castSkill(UUID, String)}, this dispatches
+     * through {@code TriggerManager} and respects the standard JSON5 {@code triggers}
+     * declarations.
+     *
+     * @param casterUuid the UUID of the entity that triggered the event
+     * @param triggerId  the trigger id (case-insensitive), matching a skill's
+     *                   {@code triggers[]} entry
+     * @return true if at least one skill was found and executed
+     */
+    boolean fireTrigger(@NotNull java.util.UUID casterUuid, @NotNull String triggerId);
 }

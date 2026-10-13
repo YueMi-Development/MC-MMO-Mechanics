@@ -8,6 +8,7 @@ import org.yuemi.mmomechanics.plugin.command.subcommands.CastCommand;
 import org.yuemi.mmomechanics.plugin.command.subcommands.ReloadCommand;
 import org.yuemi.mmomechanics.plugin.skill.SkillManager;
 import org.yuemi.mmomechanics.plugin.skill.executor.SkillExecutorImpl;
+import org.yuemi.mmomechanics.plugin.skill.trigger.EquipTriggerRegistration;
 import org.yuemi.mmomechanics.plugin.skill.trigger.TriggerBindingManager;
 import org.yuemi.mmomechanics.plugin.skill.trigger.TriggerManager;
 import org.yuemi.mmomechanics.plugin.skill.trigger.TimerManager;
@@ -40,6 +41,7 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
         this.timerManager.start();
 
         new TriggerRegistration(this, triggerManager, timerManager).register();
+        new EquipTriggerRegistration(this, triggerManager).register();
 
         // Register Command if enabled
         if (getConfig().getBoolean("features.command-enabled", true)) {
@@ -61,7 +63,7 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
             getLogger().info("Successfully hooked into PlaceholderAPI!");
         }
 
-        this.api = new MmoMechanicsApiImpl(this, new SkillExecutorImpl(this));
+        this.api = new MmoMechanicsApiImpl(this, new SkillExecutorImpl(this), triggerManager);
 
         getServer().getServicesManager().register(
                 MmoMechanicsApi.class,
