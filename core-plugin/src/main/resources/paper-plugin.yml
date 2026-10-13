@@ -1,0 +1,21 @@
+name: '${pluginName}'
+version: '${version}'
+main: org.yuemi.mmomechanics.plugin.MmoMechanicsPlugin
+api-version: '${apiVersion}'
+authors: [${authors}]
+contributors: [${contributors}'
+
+dependencies:
+  server:
+    YueMiLibs:
+      load: BEFORE
+      required: true
+      join-classpath: false
+    MmoEssence:
+      load: AFTER
+      required: false
+      join-classpath: false
+    PlaceholderAPI:
+      load: AFTER
+      required: false
+      join-classpath: false
