@@ -36,7 +36,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
     compileOnly("io.papermc.paper:paper-api:$paperApiVersion")
     compileOnly("org.yuemi:YueMiLibs-api:$yuemiLibsApiVersion")
-    compileOnly("org.yuemi:MmoEssence-api:1.0.0-SNAPSHOT")
+    compileOnly("org.yuemi:MmoEssence-api:1.0.0")
     compileOnly("me.clip:placeholderapi:2.12.2")
 }
 
