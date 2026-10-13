@@ -71,6 +71,8 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
                 this,
                 ServicePriority.Normal
         );
+
+        org.yuemi.mmomechanics.plugin.bstats.BStatsService.initialize(this);
     }
 
     public boolean isPlaceholderApiEnabled() {

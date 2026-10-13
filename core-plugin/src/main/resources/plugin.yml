@@ -10,6 +10,8 @@ softdepend: [
   PlaceholderAPI
 ]
 
+bstats-id: '${bstatsPluginId}'
+
 commands:
   mmomechanics:
     description: Main command for MMO Mechanics
