@@ -2,6 +2,7 @@
   // Modrinth project configuration
   "projectId": "R8PzhBth",
   "loaders": [
+    "folia",
     "paper",
     "spigot",
     "bukkit",
@@ -13,7 +14,8 @@
     "1.21.2",
     "1.21.3",
     "1.21.4",
-    "1.21.8"
+    "1.21.8",
+    "1.21.11"
   ],
   "dependencies": [
     {
