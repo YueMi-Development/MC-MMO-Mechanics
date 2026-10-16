@@ -5,9 +5,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Powerable;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.yuemi.libs.api.folia.FoliaSchedulers;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.target.Target;
@@ -43,18 +43,15 @@ public final class ToggleLeverMechanic implements Mechanic {
                 block.getState().update(true, true);
 
                 if (nextState && pulseTicks > 0) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            Block currentBlock = block.getLocation().getBlock();
-                            BlockData currentData = currentBlock.getBlockData();
-                            if (currentData instanceof Powerable currentPowerable && currentPowerable.isPowered()) {
-                                currentPowerable.setPowered(false);
-                                currentBlock.setBlockData(currentPowerable);
-                                currentBlock.getState().update(true, true);
-                            }
+                    FoliaSchedulers.runRegionDelayed(plugin, block.getLocation(), () -> {
+                        Block currentBlock = block.getLocation().getBlock();
+                        BlockData currentData = currentBlock.getBlockData();
+                        if (currentData instanceof Powerable currentPowerable && currentPowerable.isPowered()) {
+                            currentPowerable.setPowered(false);
+                            currentBlock.setBlockData(currentPowerable);
+                            currentBlock.getState().update(true, true);
                         }
-                    }.runTaskLater(plugin, pulseTicks);
+                    }, pulseTicks);
                 }
             }
         }

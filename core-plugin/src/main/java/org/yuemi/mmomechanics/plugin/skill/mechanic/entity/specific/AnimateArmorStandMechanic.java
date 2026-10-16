@@ -4,14 +4,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
+import org.yuemi.libs.api.folia.FoliaSchedulers;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.target.Target;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Animates armor stands by rotating their limbs over a duration of ticks.
@@ -45,27 +47,24 @@ public final class AnimateArmorStandMechanic implements Mechanic {
         for (Target target : targets) {
             Entity entity = target.getAsEntity();
             if (entity instanceof ArmorStand stand) {
-                new BukkitRunnable() {
-                    int elapsed = 0;
-
-                    @Override
-                    public void run() {
-                        if (!stand.isValid() || elapsed >= durationTicks) {
-                            cancel();
-                            return;
-                        }
-                        
-                        switch (limb) {
-                            case "head" -> stand.setHeadPose(stand.getHeadPose().add(rotX, rotY, rotZ));
-                            case "body" -> stand.setBodyPose(stand.getBodyPose().add(rotX, rotY, rotZ));
-                            case "leftarm" -> stand.setLeftArmPose(stand.getLeftArmPose().add(rotX, rotY, rotZ));
-                            case "rightarm" -> stand.setRightArmPose(stand.getRightArmPose().add(rotX, rotY, rotZ));
-                            case "leftleg" -> stand.setLeftLegPose(stand.getLeftLegPose().add(rotX, rotY, rotZ));
-                            case "rightleg" -> stand.setRightLegPose(stand.getRightLegPose().add(rotX, rotY, rotZ));
-                        }
-                        elapsed++;
+                AtomicInteger elapsed = new AtomicInteger();
+                AtomicReference<Object> handle = new AtomicReference<>();
+                handle.set(FoliaSchedulers.runEntityTimer(plugin, stand, () -> {
+                    if (!stand.isValid() || elapsed.get() >= durationTicks) {
+                        FoliaSchedulers.cancel(handle.get());
+                        return;
                     }
-                }.runTaskTimer(plugin, 0L, 1L);
+
+                    switch (limb) {
+                        case "head" -> stand.setHeadPose(stand.getHeadPose().add(rotX, rotY, rotZ));
+                        case "body" -> stand.setBodyPose(stand.getBodyPose().add(rotX, rotY, rotZ));
+                        case "leftarm" -> stand.setLeftArmPose(stand.getLeftArmPose().add(rotX, rotY, rotZ));
+                        case "rightarm" -> stand.setRightArmPose(stand.getRightArmPose().add(rotX, rotY, rotZ));
+                        case "leftleg" -> stand.setLeftLegPose(stand.getLeftLegPose().add(rotX, rotY, rotZ));
+                        case "rightleg" -> stand.setRightLegPose(stand.getRightLegPose().add(rotX, rotY, rotZ));
+                    }
+                    elapsed.incrementAndGet();
+                }, 0L, 1L));
             }
         }
     }

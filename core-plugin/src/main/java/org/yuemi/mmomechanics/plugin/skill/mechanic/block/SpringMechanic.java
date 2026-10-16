@@ -3,8 +3,8 @@ package org.yuemi.mmomechanics.plugin.skill.mechanic.block;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.yuemi.libs.api.folia.FoliaSchedulers;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.target.Target;
@@ -38,15 +38,12 @@ public final class SpringMechanic implements Mechanic {
             block.setType(liquid);
 
             if (durationTicks > 0) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        Block currentBlock = block.getLocation().getBlock();
-                        if (currentBlock.getType() == liquid) {
-                            currentBlock.setType(original);
-                        }
+                FoliaSchedulers.runRegionDelayed(plugin, block.getLocation(), () -> {
+                    Block currentBlock = block.getLocation().getBlock();
+                    if (currentBlock.getType() == liquid) {
+                        currentBlock.setType(original);
                     }
-                }.runTaskLater(plugin, durationTicks);
+                }, durationTicks);
             }
         }
     }

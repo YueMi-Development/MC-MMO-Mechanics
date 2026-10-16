@@ -3,26 +3,31 @@ package org.yuemi.mmomechanics.plugin.skill.trigger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.yuemi.libs.api.folia.FoliaSchedulers;
 import org.yuemi.mmomechanics.api.skill.Metaskill;
 import org.yuemi.mmomechanics.plugin.skill.parser.ParserUtils;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Manages executing the 'onTimer' skills at specified intervals.
+ *
+ * <p>Each tracked entity gets its own repeating task on that entity's scheduler, so the
+ * work always runs on the region thread owning the entity. This replaces an earlier
+ * global per-tick task that scanned every loaded entity in every world, which is not
+ * valid on Folia.
  */
 public final class TimerManager {
 
     private final JavaPlugin plugin;
     private final TriggerBindingManager bindingManager;
     private final TriggerManager triggerManager;
-    private final Set<Entity> activeEntities = ConcurrentHashMap.newKeySet();
-    private BukkitRunnable timerTask;
+    private final Map<UUID, Object> entityTasks = new ConcurrentHashMap<>();
 
     public TimerManager(@NotNull JavaPlugin plugin, @NotNull TriggerBindingManager bindingManager, @NotNull TriggerManager triggerManager) {
         this.plugin = plugin;
@@ -31,80 +36,60 @@ public final class TimerManager {
     }
 
     public void start() {
-        if (timerTask != null) {
-            timerTask.cancel();
-        }
-
-        timerTask = new BukkitRunnable() {
-            private int scanTicks = 0;
-
-            @Override
-            public void run() {
-                scanTicks++;
-                // Refresh the active entities set from loaded worlds once a second (20 ticks)
-                if (scanTicks >= 20) {
-                    scanTicks = 0;
-                    refreshActiveEntities();
-                }
-
-                int currentTick = Bukkit.getCurrentTick();
-                activeEntities.removeIf(entity -> {
-                    if (!entity.isValid() || entity.isDead()) {
-                        return true;
-                    }
-
-                    Collection<Metaskill> skills = bindingManager.getBoundSkills(entity);
-                    for (Metaskill skill : skills) {
-                        for (String triggerStr : skill.getTriggers()) {
-                            if (triggerStr.toLowerCase().startsWith("ontimer")) {
-                                int interval = parseInterval(triggerStr);
-                                if (currentTick % interval == 0) {
-                                    triggerManager.executeTrigger(entity, "onTimer", null);
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                });
-            }
-        };
-        timerTask.runTaskTimer(plugin, 1L, 1L);
+        // Timer work is per-entity and scheduled by trackEntity, so there is nothing
+        // global to start. Reset in case start() is called again after a reload.
+        stop();
     }
 
     public void stop() {
-        if (timerTask != null) {
-            timerTask.cancel();
-            timerTask = null;
+        for (Object task : entityTasks.values()) {
+            FoliaSchedulers.cancel(task);
         }
-        activeEntities.clear();
+        entityTasks.clear();
     }
 
     /**
      * Tracks an entity immediately (e.g. when spawned or loaded).
      */
     public void trackEntity(@NotNull Entity entity) {
-        if (entity.isValid() && !entity.isDead()) {
-            activeEntities.add(entity);
+        if (!entity.isValid() || entity.isDead()) {
+            return;
+        }
+        UUID id = entity.getUniqueId();
+        if (entityTasks.containsKey(id)) {
+            return;
+        }
+
+        AtomicReference<Object> handle = new AtomicReference<>();
+        Object task = FoliaSchedulers.runEntityTimer(plugin, entity, () -> {
+            if (!entity.isValid() || entity.isDead()) {
+                FoliaSchedulers.cancel(handle.get());
+                entityTasks.remove(id);
+                return;
+            }
+            tickEntity(entity);
+        }, 1L, 1L);
+
+        handle.set(task);
+        if (task == null) {
+            return;
+        }
+        Object previous = entityTasks.putIfAbsent(id, task);
+        if (previous != null) {
+            // Another caller won the race; keep the first task only.
+            FoliaSchedulers.cancel(task);
         }
     }
 
-    private void refreshActiveEntities() {
-        for (org.bukkit.World world : Bukkit.getWorlds()) {
-            for (Entity entity : world.getEntities()) {
-                if (entity.isValid() && !entity.isDead()) {
-                    Collection<Metaskill> skills = bindingManager.getBoundSkills(entity);
-                    boolean hasTimer = false;
-                    for (Metaskill skill : skills) {
-                        for (String triggerStr : skill.getTriggers()) {
-                            if (triggerStr.toLowerCase().startsWith("ontimer")) {
-                                hasTimer = true;
-                                break;
-                            }
-                        }
-                        if (hasTimer) break;
-                    }
-                    if (hasTimer) {
-                        activeEntities.add(entity);
+    private void tickEntity(@NotNull Entity entity) {
+        int currentTick = Bukkit.getCurrentTick();
+        Collection<Metaskill> skills = bindingManager.getBoundSkills(entity);
+        for (Metaskill skill : skills) {
+            for (String triggerStr : skill.getTriggers()) {
+                if (triggerStr.toLowerCase().startsWith("ontimer")) {
+                    int interval = parseInterval(triggerStr);
+                    if (currentTick % interval == 0) {
+                        triggerManager.executeTrigger(entity, "onTimer", null);
                     }
                 }
             }

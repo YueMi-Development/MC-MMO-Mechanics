@@ -98,13 +98,13 @@ public final class EquipTriggerRegistration {
         public void onClick(org.bukkit.event.inventory.InventoryClickEvent event) {
             if (!(event.getWhoClicked() instanceof Player player)) return;
             org.bukkit.inventory.PlayerInventory pInv = player.getInventory();
-            org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> checkArmor(player, pInv));
+            org.yuemi.libs.api.folia.FoliaSchedulers.executeEntity(plugin, player, () -> checkArmor(player, pInv));
         }
 
         @org.bukkit.event.EventHandler(priority = org.bukkit.event.EventPriority.MONITOR, ignoreCancelled = true)
         public void onDrag(org.bukkit.event.inventory.InventoryDragEvent event) {
             if (!(event.getWhoClicked() instanceof Player player)) return;
-            org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> checkArmor(player, player.getInventory()));
+            org.yuemi.libs.api.folia.FoliaSchedulers.executeEntity(plugin, player, () -> checkArmor(player, player.getInventory()));
         }
 
         private void checkArmor(Player player, org.bukkit.inventory.PlayerInventory inv) {

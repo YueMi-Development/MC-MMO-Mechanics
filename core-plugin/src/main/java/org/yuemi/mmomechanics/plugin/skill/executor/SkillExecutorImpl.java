@@ -1,7 +1,9 @@
 package org.yuemi.mmomechanics.plugin.skill.executor;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.yuemi.libs.api.folia.FoliaSchedulers;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.executor.SkillExecutor;
 import org.yuemi.mmomechanics.api.skill.mechanic.DelayMechanic;
@@ -56,9 +58,13 @@ public final class SkillExecutorImpl implements SkillExecutor {
                 } catch (NumberFormatException ignored) {}
             }
             long finalTicks = ticks;
-            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-                runStep(context, wrappers, currentTargets, index + 1);
-            }, finalTicks);
+            Runnable continuation = () -> runStep(context, wrappers, currentTargets, index + 1);
+            Entity caster = context.getCaster().getAsEntity();
+            if (caster != null) {
+                FoliaSchedulers.runEntityDelayed(plugin, caster, continuation, finalTicks, 0L);
+            } else {
+                FoliaSchedulers.runRegionDelayed(plugin, context.getCaster().getLocation(), continuation, finalTicks);
+            }
             return;
         }
 
