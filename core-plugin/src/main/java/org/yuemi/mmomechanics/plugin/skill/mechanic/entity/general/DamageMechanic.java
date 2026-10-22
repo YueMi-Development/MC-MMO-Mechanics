@@ -5,6 +5,7 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
+import org.yuemi.mmomechanics.api.skill.context.CasterSnapshot;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.target.Target;
@@ -43,12 +44,17 @@ public final class DamageMechanic implements Mechanic {
     @Override
     public void execute(@NotNull SkillContext context, @NotNull Collection<Target> targets) {
         Entity caster = context.getCaster().getAsEntity();
+        CasterSnapshot snapshot = context.getCasterSnapshot();
 
         double baseDamage = 1.0;
         if (type == Type.BASE && caster instanceof LivingEntity livingCaster) {
-            var attr = livingCaster.getAttribute(Attribute.ATTACK_DAMAGE);
-            if (attr != null) {
-                baseDamage = attr.getValue();
+            if (snapshot != null && snapshot.baseAttackDamage() != null) {
+                baseDamage = snapshot.baseAttackDamage();
+            } else {
+                var attr = livingCaster.getAttribute(Attribute.ATTACK_DAMAGE);
+                if (attr != null) {
+                    baseDamage = attr.getValue();
+                }
             }
         }
 

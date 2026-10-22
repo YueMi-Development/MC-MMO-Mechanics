@@ -67,12 +67,29 @@ final class MmoMechanicsApiImpl implements MmoMechanicsApi {
         }
         org.yuemi.mmomechanics.api.skill.Metaskill skill = skillOpt.get();
         org.yuemi.mmomechanics.api.skill.trigger.Trigger trigger = () -> "API";
-        org.yuemi.mmomechanics.api.skill.context.SkillContext context = new org.yuemi.mmomechanics.api.skill.context.SkillContext(
-                new org.yuemi.mmomechanics.api.skill.target.EntityTarget(entity),
-                trigger
-        );
-        skill.execute(context, java.util.Collections.singletonList(context.getCaster()));
+        Runnable run = () -> {
+            org.yuemi.mmomechanics.api.skill.context.SkillContext context =
+                    new org.yuemi.mmomechanics.api.skill.context.SkillContext(
+                            new org.yuemi.mmomechanics.api.skill.target.EntityTarget(entity),
+                            trigger
+                    );
+            skill.execute(context, java.util.Collections.singletonList(context.getCaster()));
+        };
+        // The caller may be on any thread, so on Folia the skill starts on the caster's region.
+        if (isFolia()) {
+            entity.getScheduler().execute(plugin, run, () -> { }, 0L);
+        } else {
+            run.run();
+        }
         return true;
+    }
+
+    private boolean isFolia() {
+        try {
+            return org.yuemi.libs.api.platform.PlatformProvider.isFolia();
+        } catch (IllegalStateException e) {
+            return false;
+        }
     }
 
     @Override

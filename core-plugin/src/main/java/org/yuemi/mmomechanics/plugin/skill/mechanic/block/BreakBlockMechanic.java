@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.target.Target;
+import org.yuemi.mmomechanics.plugin.skill.executor.TargetDispatcher;
 
 import java.util.Collection;
 
@@ -35,7 +36,11 @@ public final class BreakBlockMechanic implements Mechanic {
 
             if (giveMaterial != Material.AIR && casterPlayer != null) {
                 block.setType(Material.AIR);
-                casterPlayer.getInventory().addItem(new ItemStack(giveMaterial, giveAmount));
+                // The block may live in another region than the caster, so the
+                // inventory grant has to run on the caster's own thread.
+                TargetDispatcher dispatcher = TargetDispatcher.getInstance();
+                dispatcher.dispatchToCaster(casterPlayer,
+                        () -> casterPlayer.getInventory().addItem(new ItemStack(giveMaterial, giveAmount)));
             } else {
                 if (dropItems) {
                     block.breakNaturally();

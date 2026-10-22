@@ -1,14 +1,18 @@
 package org.yuemi.mmomechanics.plugin.skill.mechanic.block;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.yuemi.mmomechanics.api.skill.context.CasterSnapshot;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
+import org.yuemi.mmomechanics.api.skill.target.LocationTarget;
 import org.yuemi.mmomechanics.api.skill.target.Target;
+import org.yuemi.mmomechanics.plugin.skill.executor.TargetDispatcher;
 
 import java.util.Collection;
 
@@ -27,6 +31,7 @@ public final class PushBlockMechanic implements Mechanic {
     @Override
     public void execute(@NotNull SkillContext context, @NotNull Collection<Target> targets) {
         Entity caster = context.getCaster().getAsEntity();
+        CasterSnapshot snapshot = context.getCasterSnapshot();
 
         for (Target target : targets) {
             Block block = target.getLocation().getBlock();
@@ -42,7 +47,8 @@ public final class PushBlockMechanic implements Mechanic {
                 case "down" -> dir.setY(-1);
                 default -> {
                     if (caster != null) {
-                        dir = caster.getLocation().getDirection().clone().setY(0);
+                        Vector facing = snapshot != null ? snapshot.direction() : caster.getLocation().getDirection();
+                        dir = facing.clone().setY(0);
                         if (dir.lengthSquared() > 0) {
                             dir.normalize();
                         }
@@ -58,10 +64,15 @@ public final class PushBlockMechanic implements Mechanic {
             // Set source to AIR
             block.setType(Material.AIR);
 
-            // Set destination
-            Block destination = block.getLocation().add(dir.multiply(distance)).getBlock();
-            destination.setType(material, true);
-            destination.setBlockData(blockData, true);
+            // Set destination. It may lie in another region than the source block,
+            // so the write has to run on the thread owning the destination.
+            Location destinationLocation = block.getLocation().add(dir.multiply(distance));
+            TargetDispatcher dispatcher = TargetDispatcher.getInstance();
+            dispatcher.dispatch(new LocationTarget(destinationLocation), () -> {
+                Block destination = destinationLocation.getBlock();
+                destination.setType(material, true);
+                destination.setBlockData(blockData, true);
+            });
         }
     }
 }

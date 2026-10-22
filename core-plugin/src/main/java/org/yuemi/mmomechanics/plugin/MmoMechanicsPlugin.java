@@ -36,7 +36,7 @@ public final class MmoMechanicsPlugin extends JavaPlugin {
 
         // Initialize Triggers
         this.triggerBindingManager = new TriggerBindingManager(this, skillManager);
-        this.triggerManager = new TriggerManager(triggerBindingManager);
+        this.triggerManager = new TriggerManager(this, triggerBindingManager);
         this.timerManager = new TimerManager(this, triggerBindingManager, triggerManager);
         this.timerManager.start();
 

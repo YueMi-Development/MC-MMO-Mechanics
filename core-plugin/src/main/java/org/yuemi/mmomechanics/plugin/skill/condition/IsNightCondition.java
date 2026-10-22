@@ -10,7 +10,10 @@ public final class IsNightCondition implements Condition {
 
     @Override
     public boolean test(@NotNull SkillContext context, @NotNull Target target) {
-        World world = context.getCaster().getLocation().getWorld();
+        var snapshot = context.getCasterSnapshot();
+        World world = snapshot != null
+                ? snapshot.location().getWorld()
+                : context.getCaster().getLocation().getWorld();
         if (world == null) return false;
         long time = world.getTime() % 24000;
         return time >= 13000 && time < 24000;

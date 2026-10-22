@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.target.Target;
+import org.yuemi.mmomechanics.plugin.skill.executor.TargetDispatcher;
 
 import java.util.Collection;
 
@@ -48,12 +49,25 @@ public final class EquipMechanic implements Mechanic {
                 if (target.getAsEntity() instanceof LivingEntity livingTarget) {
                     EntityEquipment targetEq = livingTarget.getEquipment();
                     if (targetEq != null) {
-                        casterEq.setHelmet(targetEq.getHelmet() != null ? targetEq.getHelmet().clone() : null);
-                        casterEq.setChestplate(targetEq.getChestplate() != null ? targetEq.getChestplate().clone() : null);
-                        casterEq.setLeggings(targetEq.getLeggings() != null ? targetEq.getLeggings().clone() : null);
-                        casterEq.setBoots(targetEq.getBoots() != null ? targetEq.getBoots().clone() : null);
-                        casterEq.setItemInMainHand(targetEq.getItemInMainHand() != null ? targetEq.getItemInMainHand().clone() : null);
-                        casterEq.setItemInOffHand(targetEq.getItemInOffHand() != null ? targetEq.getItemInOffHand().clone() : null);
+                        ItemStack[] copy = {
+                                targetEq.getHelmet() != null ? targetEq.getHelmet().clone() : null,
+                                targetEq.getChestplate() != null ? targetEq.getChestplate().clone() : null,
+                                targetEq.getLeggings() != null ? targetEq.getLeggings().clone() : null,
+                                targetEq.getBoots() != null ? targetEq.getBoots().clone() : null,
+                                targetEq.getItemInMainHand() != null ? targetEq.getItemInMainHand().clone() : null,
+                                targetEq.getItemInOffHand() != null ? targetEq.getItemInOffHand().clone() : null
+                        };
+                        // The caster may live in another region than the target, so the
+                        // equipment write has to run on the caster's own thread.
+                        TargetDispatcher dispatcher = TargetDispatcher.getInstance();
+                        dispatcher.dispatchToCaster(caster, () -> {
+                            casterEq.setHelmet(copy[0]);
+                            casterEq.setChestplate(copy[1]);
+                            casterEq.setLeggings(copy[2]);
+                            casterEq.setBoots(copy[3]);
+                            casterEq.setItemInMainHand(copy[4]);
+                            casterEq.setItemInOffHand(copy[5]);
+                        });
                         break; // Copy first target
                     }
                 }

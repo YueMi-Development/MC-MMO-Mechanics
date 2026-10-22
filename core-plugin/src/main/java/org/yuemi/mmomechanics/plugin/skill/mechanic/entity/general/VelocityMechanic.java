@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.yuemi.mmomechanics.api.skill.context.CasterSnapshot;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.target.Target;
@@ -49,6 +50,7 @@ public final class VelocityMechanic implements Mechanic {
     @Override
     public void execute(@NotNull SkillContext context, @NotNull Collection<Target> targets) {
         Entity caster = context.getCaster().getAsEntity();
+        CasterSnapshot snapshot = context.getCasterSnapshot();
 
         for (Target target : targets) {
             Entity entity = target.getAsEntity();
@@ -56,7 +58,7 @@ public final class VelocityMechanic implements Mechanic {
 
             Vector vel;
             if (propel && caster != null) {
-                Location casterLoc = caster.getLocation();
+                Location casterLoc = snapshot != null ? snapshot.location() : caster.getLocation();
                 Location targetLoc = entity.getLocation();
                 Vector direction = targetLoc.toVector().subtract(casterLoc.toVector());
                 if (direction.lengthSquared() > 0) {
@@ -66,7 +68,8 @@ public final class VelocityMechanic implements Mechanic {
                 }
                 vel = direction.multiply(force);
             } else if (directional && caster != null) {
-                vel = caster.getLocation().getDirection().clone().multiply(force);
+                Vector casterDirection = snapshot != null ? snapshot.direction() : caster.getLocation().getDirection();
+                vel = casterDirection.clone().multiply(force);
                 vel.setY(vel.getY() + y);
             } else {
                 vel = new Vector(x, y, z);

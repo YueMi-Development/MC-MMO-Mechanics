@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.yuemi.mmomechanics.api.skill.context.SkillContext;
 import org.yuemi.mmomechanics.api.skill.mechanic.Mechanic;
 import org.yuemi.mmomechanics.api.skill.target.Target;
+import org.yuemi.mmomechanics.plugin.skill.executor.TargetDispatcher;
 
 import java.util.Collection;
 
@@ -37,10 +38,16 @@ public final class BlockMaskMechanic implements Mechanic {
             if (casterPlayer != null) {
                 casterPlayer.sendBlockChange(loc, blockData);
             } else {
-                for (Player player : loc.getWorld().getPlayers()) {
-                    if (player.getLocation().distanceSquared(loc) < 2500) { // 50 blocks radius
-                        player.sendBlockChange(loc, blockData);
-                    }
+                // A world-wide player scan reads the position of players in other regions,
+                // so the nearby lookup is scoped and each send runs on the player's thread.
+                for (var entity : loc.getWorld().getNearbyEntities(loc, 50, 50, 50)) {
+                    if (!(entity instanceof Player player)) continue;
+                    TargetDispatcher dispatcher = TargetDispatcher.getInstance();
+                    dispatcher.dispatchToCaster(player, () -> {
+                        if (player.getLocation().distanceSquared(loc) < 2500) { // 50 blocks radius
+                            player.sendBlockChange(loc, blockData);
+                        }
+                    });
                 }
             }
         }
