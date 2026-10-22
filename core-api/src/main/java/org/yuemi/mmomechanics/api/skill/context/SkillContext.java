@@ -5,10 +5,10 @@ import org.jetbrains.annotations.Nullable;
 import org.yuemi.mmomechanics.api.skill.target.Target;
 import org.yuemi.mmomechanics.api.skill.trigger.Trigger;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Context wrapper passed during skill executions, containing the caster, the trigger, and local variables.
@@ -16,7 +16,8 @@ import java.util.Optional;
 public final class SkillContext {
     private final Target caster;
     private final Trigger trigger;
-    private final Map<String, Object> variables = new HashMap<>();
+    private final Map<String, Object> variables = new ConcurrentHashMap<>();
+    private volatile CasterSnapshot casterSnapshot;
 
     /**
      * Constructs a SkillContext.
@@ -39,6 +40,29 @@ public final class SkillContext {
     }
 
     /**
+     * Gets the caster state captured when the skill started.
+     *
+     * <p>On Folia a mechanic can run on the region thread of a target in another region.
+     * Reading the caster's live position from there is a cross-region access, so the
+     * position, direction and base damage are captured up front on the caster's thread.
+     * Mechanics should prefer this over reading the caster entity directly.
+     *
+     * @return the caster snapshot, or null when none was taken
+     */
+    public @Nullable CasterSnapshot getCasterSnapshot() {
+        return casterSnapshot;
+    }
+
+    /**
+     * Sets the caster snapshot.
+     *
+     * @param snapshot the snapshot to store, or null to clear it
+     */
+    public void setCasterSnapshot(@Nullable CasterSnapshot snapshot) {
+        this.casterSnapshot = snapshot;
+    }
+
+    /**
      * Gets the trigger event context of the skill.
      *
      * @return the trigger context
@@ -54,6 +78,10 @@ public final class SkillContext {
      * @param value the variable value, or null to clear it
      */
     public void setVariable(@NotNull String name, @Nullable Object value) {
+        if (value == null) {
+            variables.remove(name);
+            return;
+        }
         variables.put(name, value);
     }
 
